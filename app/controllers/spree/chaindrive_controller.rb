@@ -22,7 +22,8 @@ module Spree
                   end
                 end
               end
-             rescue
+            rescue Exception
+
               error = "structure du fichier invalide"
              end
 
