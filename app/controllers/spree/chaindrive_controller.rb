@@ -12,7 +12,7 @@ module Spree
 
           #Dir.glob("*").max_by{|f| /^(.+?)_/.match(File.basename(f)).captures[0]}
           if !error
-
+            begin
               sku_qty = SmarterCSV.process(file.path, {:col_sep =>';', :chunk_size => 100, :key_mapping => {:sku_skuid=>:sku, :sku_available =>:qty , :sku_eds => :eds}}) do |chunk|
                 chunk.each do |row|
                   variant = Spree::Variant.where(sku: row[:sku]).first
@@ -22,8 +22,9 @@ module Spree
                   end
                 end
               end
-
-             # error = "structure du fichier invalide"
+             rescue
+              error = "structure du fichier invalide"
+             end
 
 
             if !error
