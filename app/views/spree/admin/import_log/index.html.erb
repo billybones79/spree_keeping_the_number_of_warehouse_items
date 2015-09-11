@@ -1,0 +1,22 @@
+<% if @import_logs.any? %>
+    <table class="table" id='listing_stock_locations' data-hook>
+      <thead>
+      <tr data-hook="stock_locations_header">
+        <th><%= Spree.t(:date) %></th>
+        <th><%= Spree.t(:number) %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @import_logs.each do |import_log| %>
+          <tr>
+            <td><%= import_log.created_at %></td>
+            <td><%= link_to import_log.number, admin_import_log_path(import_log)  %> </td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+<% else %>
+    <div class="alert alert-info no-objects-found">
+      <%= Spree.t(:no_resource_found, resource: plural_resource_name(ImportLog)) %>
+    </div>
+<% end %>

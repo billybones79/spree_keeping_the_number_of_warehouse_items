@@ -1,0 +1,7 @@
+<ul id="sidebar-chaindrive" class="collapse nav nav-pills nav-stacked" data-hook="admin_chaindrive_sub_tabs">
+  <%= tab :import,  :url => '#chaindrive', :data_hook=>'chaindrive_import'%>
+  <%= tab :import_logs %>
+  <%= form_tag('/chaindrive/import', multipart:true) do -%>
+      <input type='file' id='chaindrive_file' name='chaindrive_file' style='visibility: hidden; width: 1px; height: 1px' multiple />
+  <% end -%>
+</ul>

@@ -1,0 +1,6 @@
+fr:
+  spree:
+    stock_on_hold: "En attente"
+    number: "Numéro du log"
+    chaindrive_import : "chaindrive"
+    import_log_for_import_log: "Log d'importation pour le %{import_log_date}"
