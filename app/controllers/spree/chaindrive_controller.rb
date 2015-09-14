@@ -18,7 +18,7 @@ module Spree
                   variant = Spree::Variant.where(sku: row[:sku]).first
                   if variant && row[:qty].is_a?(Integer)
                     location = Spree::StockLocation.where(:default => true).first()
-                    if isset(location)
+                    if location
                       location.import_warehouse_item(variant, row[:qty], log)
                     else
                       error = "Il n'y a pas de location par défaut, veuillez en sélectionner une."
@@ -27,7 +27,7 @@ module Spree
                   end
                 end
               end
-           
+
 
 
             if !error
