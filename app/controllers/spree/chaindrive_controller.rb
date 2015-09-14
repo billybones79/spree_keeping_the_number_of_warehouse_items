@@ -12,15 +12,25 @@ module Spree
 
           #Dir.glob("*").max_by{|f| /^(.+?)_/.match(File.basename(f)).captures[0]}
           if !error
+            begin
               sku_qty = SmarterCSV.process(file.path, {:col_sep =>';', :chunk_size => 100, :key_mapping => {:sku_skuid=>:sku, :sku_available =>:qty , :sku_eds => :eds}}) do |chunk|
                 chunk.each do |row|
                   variant = Spree::Variant.where(sku: row[:sku]).first
                   if variant && row[:qty].is_a?(Integer)
                     location = Spree::StockLocation.where(:default => true).first()
-                    location.import_warehouse_item(variant, row[:qty], log)
+                    if isset(location)
+                      location.import_warehouse_item(variant, row[:qty], log)
+                    else
+                      error = "Il n'y a pas de location par défaut, veuillez en sélectionner une."
+                      break
+                    end
                   end
                 end
               end
+            rescue Exception
+
+              error = "structure du fichier invalide"
+             end
 
 
             if !error
