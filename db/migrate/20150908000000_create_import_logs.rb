@@ -10,6 +10,6 @@ class CreateImportLogs < ActiveRecord::Migration
   end
 
   def down
-    remove_column :spree_stock_items, :stock_on_hold
+    drop_table(:import_logs)
   end
 end
