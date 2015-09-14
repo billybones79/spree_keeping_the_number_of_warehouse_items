@@ -37,9 +37,9 @@ Spree::StockLocation.class_eval do
 
     if diff>0
         restock(variant,diff, originator)
-    elsif variant.count_on_hand + diff > 0
+    elsif variant.count_on_hand + diff > 0 && diff !=0
          unstock(variant, -diff, originator)
-    else
+    else diff !=0
          unstock(variant, variant.count_on_hand, originator)
     end
     variant.set_warehouse_stock(quantity)
