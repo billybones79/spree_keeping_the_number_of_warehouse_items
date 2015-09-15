@@ -28,7 +28,7 @@ module Spree
         end
       end
       public
-        def process_chunk chunk, log_id
+        def self.process_chunk chunk, log_id
           log = ImportLog.find(log_id)
           begin
           chunk.each do |row|
