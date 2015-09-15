@@ -14,7 +14,7 @@ module Spree
           if !error
 
               sku_qty = SmarterCSV.process(file.path, {:col_sep =>';', :chunk_size => 100, :key_mapping => {:sku_skuid=>:sku, :sku_available =>:qty , :sku_eds => :eds}}) do |chunk|
-                error = self.delay.process_chunk chunk, log
+                error = ChaindriveController.delay.process_chunk chunk, log
               end
             if !error
               log.message = "operation effectuée avec succès."
