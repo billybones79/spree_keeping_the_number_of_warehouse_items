@@ -30,7 +30,7 @@ module Spree
       public
         def self.process_chunk chunk, log_id
           log = ImportLog.find(log_id)
-          begin
+
           chunk.each do |row|
             variant = Spree::Variant.where(sku: row[:sku]).first
             if variant && row[:qty].is_a?(Integer)
@@ -43,11 +43,8 @@ module Spree
               end
             end
           end
-          rescue
-            if log.message ==  "operation effectuée avec succès."
-              log.message = "Il y a eu une erreur lors du traitement de la tâche, il se pourrait que certains élements ne se soit pas ajusté correctement."
-            end
-          end
+
+          
         end
     end
   end
