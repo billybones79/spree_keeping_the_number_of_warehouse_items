@@ -27,7 +27,7 @@ module Spree
           redirect_to ("/admin"), :flash => { :notice =>"operation en cours." }
         end
       end
-      private
+      public
         def process_chunk chunk, log_id
           log = ImportLog.find(log_id)
           begin
