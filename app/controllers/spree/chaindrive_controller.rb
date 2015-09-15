@@ -1,23 +1,37 @@
 module Spree
     class ChaindriveController < Spree::Admin::BaseController
       def import
-          log = ImportLog.create(number: DateTime.now.to_s(:number))
+
 
           session[:return_to] ||= request.referer
           file = params[:chaindrive_file].tempfile
 
           if File.extname(file.path) != ".csv"
-            error = log.message = "mauvais type de fichier : "+File.extname(file.path)
+            error = "mauvais type de fichier : "+File.extname(file.path)
+            if(:return_to)
+              redirect_to session.delete(:return_to), :flash => { :error =>error }
+            else
+              redirect_to ("/admin"), :flash => { :error => error }
+            end
           end
+
+
 
           #Dir.glob("*").max_by{|f| /^(.+?)_/.match(File.basename(f)).captures[0]}
           if !error
-
-              sku_qty = SmarterCSV.process(file.path, {:col_sep =>';', :chunk_size => 100, :key_mapping => {:sku_skuid=>:sku, :sku_available =>:qty , :sku_eds => :eds}}) do |chunk|
-               ChaindriveController.delay.process_chunk chunk, log.id
-
-
+            begin
+              log = ImportLog.create(number: DateTime.now.to_s(:number))
+              SmarterCSV.process(file.path, {:col_sep =>';', :chunk_size => 100, :key_mapping => {:sku_skuid=>:sku, :sku_available =>:qty , :sku_eds => :eds}}) do |chunk|
+                ChaindriveController.delay.process_chunk chunk, log.id
               end
+            rescue
+              log.delete
+              if(:return_to)
+                redirect_to session.delete(:return_to), :flash => { :notice =>"Le fichier n'a pas le bon format" }
+              else
+                redirect_to ("/admin"), :flash => { :notice =>"Le fichier n'a pas le bon format" }
+              end
+            end
             log.message = "operation effectuée avec succès."
             log.save
           end
