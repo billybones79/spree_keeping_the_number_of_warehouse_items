@@ -12,12 +12,21 @@ module Spree
 
           #Dir.glob("*").max_by{|f| /^(.+?)_/.match(File.basename(f)).captures[0]}
           if !error
-            
+            begin
               log = ImportLog.create(number: DateTime.now.to_s(:number))
               SmarterCSV.process(file.path, {:col_sep =>';', :chunk_size => 100, :key_mapping => {:sku_skuid=>:sku, :sku_available =>:qty , :sku_eds => :eds}}) do |chunk|
                 ChaindriveController.delay.process_chunk chunk, log.id
               end
+            rescue CannotConnectError
+              log.delete
+              error = "Une erreur de connection est survenue"
+            rescue StandardError =>e
+              log.delete
+              Rails.logger.error "erreur lors du chargement de fichier : #{e.message} "
+              error = "Le fichier n'a pas le bon format"
+            end
             if !error
+
               log.message = "operation effectuée avec succès."
               log.save
             end
