@@ -1,5 +1,6 @@
 <% content_for :page_title do %>
     <%= Spree.t(:import_log_for_import_log, import_log_date: @import_log.created_at) %>
+    message d'importation : <%=@import_log.message%>
 <% end %>
 
 
