@@ -14,7 +14,7 @@ module Spree
           if !error
 
               sku_qty = SmarterCSV.process(file.path, {:col_sep =>';', :chunk_size => 100, :key_mapping => {:sku_skuid=>:sku, :sku_available =>:qty , :sku_eds => :eds}}) do |chunk|
-                error = ChaindriveController.delay.process_chunk chunk, log
+                error = ChaindriveController.delay.process_chunk chunk, log.id
               end
             if !error
               log.message = "operation effectuée avec succès."
@@ -28,7 +28,9 @@ module Spree
         end
       end
       private
-        def process_chunk chunk, log
+        def process_chunk chunk, log_id
+          log = ImportLog.find(log_id)
+          begin
           chunk.each do |row|
             variant = Spree::Variant.where(sku: row[:sku]).first
             if variant && row[:qty].is_a?(Integer)
@@ -41,7 +43,11 @@ module Spree
               end
             end
           end
-          error ? error : nil
+          rescue
+            if log.message ==  "operation effectuée avec succès."
+              log.message = "Il y a eu une erreur lors du traitement de la tâche, il se pourrait que certains élements ne se soit pas ajusté correctement."
+            end
+          end
         end
     end
   end
