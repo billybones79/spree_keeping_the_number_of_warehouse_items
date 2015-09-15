@@ -17,7 +17,7 @@ module Spree
               SmarterCSV.process(file.path, {:col_sep =>';', :chunk_size => 100, :key_mapping => {:sku_skuid=>:sku, :sku_available =>:qty , :sku_eds => :eds}}) do |chunk|
                 ChaindriveController.delay.process_chunk chunk, log.id
               end
-            rescue CannotConnectError
+            rescue Redis::CannotConnectError
               log.delete
               error = "Une erreur de connection est survenue"
             rescue StandardError =>e
