@@ -8,14 +8,7 @@ module Spree
 
           if File.extname(file.path) != ".csv"
             error = "mauvais type de fichier : "+File.extname(file.path)
-            if(:return_to)
-              redirect_to session.delete(:return_to), :flash => { :error =>error }
-            else
-              redirect_to ("/admin"), :flash => { :error => error }
-            end
           end
-
-
 
           #Dir.glob("*").max_by{|f| /^(.+?)_/.match(File.basename(f)).captures[0]}
           if !error
@@ -26,20 +19,19 @@ module Spree
               end
             rescue
               log.delete
-              if(:return_to)
-                redirect_to session.delete(:return_to), :flash => { :notice =>"Le fichier n'a pas le bon format" }
-              else
-                redirect_to ("/admin"), :flash => { :notice =>"Le fichier n'a pas le bon format" }
-              end
+              error = "Le fichier n'a pas le bon format"
+
             end
-            log.message = "operation effectuée avec succès."
-            log.save
+            if !error
+              log.message = "operation effectuée avec succès."
+              log.save
+            end
           end
 
         if(:return_to)
-          redirect_to session.delete(:return_to), :flash => { :notice =>"operation en cours." }
+          redirect_to session.delete(:return_to), :flash => error ? {:error =>error } : { :notice =>"operation en cours." }
         else
-          redirect_to ("/admin"), :flash => { :notice =>"operation en cours." }
+          redirect_to ("/admin"), :flash =>error ? {:error =>error } : { :notice =>"operation en cours." }
         end
       end
       public
