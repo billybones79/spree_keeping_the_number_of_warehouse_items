@@ -45,8 +45,6 @@ module Spree
           begin
           chunk.each do |row|
             variant = Spree::Variant.where(sku: row[:sku]).first
-            puts row[:sku]
-            puts variant.inspect
             if variant && row[:qty].is_a?(Integer)
               location = Spree::StockLocation.where(:default => true).first()
               if location
@@ -54,6 +52,7 @@ module Spree
               else
                 log.message =  "Il n'y a pas de location par défaut, veuillez en sélectionner une."
                 log.save
+                puts log.inspect
                 break
               end
             end
