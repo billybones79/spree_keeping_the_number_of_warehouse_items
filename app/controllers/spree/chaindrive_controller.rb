@@ -20,6 +20,7 @@ module Spree
             rescue Redis::CannotConnectError
               log.delete
               error = "Une erreur de connection est survenue"
+            end
             if !error
 
               log.message = "operation en cours."
