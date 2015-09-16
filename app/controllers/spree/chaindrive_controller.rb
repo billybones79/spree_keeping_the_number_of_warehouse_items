@@ -23,7 +23,10 @@ module Spree
             rescue Redis::CannotConnectError
               log.delete
               error = "Une erreur de connection est survenue"
-          end
+            rescue StandardError
+              error = "Une erreur inconnue estsurvenue"
+
+            end
 
         if(:return_to)
           redirect_to session.delete(:return_to), :flash => error ? {:error =>error } : { :notice =>"operation effectuée avec succés." }
@@ -65,7 +68,7 @@ module Spree
           end
         end
       end
-    
+
   end
 
 
