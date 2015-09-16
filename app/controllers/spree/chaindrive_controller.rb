@@ -30,6 +30,7 @@ module Spree
         else
           redirect_to ("/admin"), :flash =>error ? {:error =>error } : { :notice =>"operation effectuée avec succés." }
         end
+          end
       end
       public
         def self.process_chunk chunk, log_id
@@ -64,7 +65,7 @@ module Spree
           end
         end
       end
-    end
+    
   end
 
 
