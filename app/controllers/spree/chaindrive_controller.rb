@@ -12,10 +12,11 @@ module Spree
 
           #Dir.glob("*").max_by{|f| /^(.+?)_/.match(File.basename(f)).captures[0]}
           if !error
-            log.message = "operation en cours."
-            log.save
+
             begin
               log = ImportLog.create(number: DateTime.now.to_s(:number))
+              log.message = "operation en cours."
+              log.save
               SmarterCSV.process(file.path, {:col_sep =>';', :chunk_size => 100, :key_mapping => {:sku_skuid=>:sku, :sku_available =>:qty , :sku_eds => :eds}}) do |chunk|
                 ChaindriveController.process_chunk chunk, log.id
               end
