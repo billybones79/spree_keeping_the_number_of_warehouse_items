@@ -35,7 +35,6 @@ Spree::StockLocation.class_eval do
     # problable que on aie plus de warehouse_stock que de on_hand, mais pas l'inverse
     diff = [quantity - variant.warehouse_stock, quantity - variant.count_on_hand].min
 
-    puts variant.sku+" diff : "+diff
     if diff>0
         restock(variant,diff, originator)
     elsif variant.count_on_hand + diff > 0 && diff !=0
