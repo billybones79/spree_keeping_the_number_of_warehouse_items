@@ -20,11 +20,6 @@ module Spree
             rescue Redis::CannotConnectError
               log.delete
               error = "Une erreur de connection est survenue"
-            rescue StandardError =>e
-              log.delete
-              Rails.logger.error "erreur lors du chargement de fichier : #{e.message} "
-              error = "Le fichier n'a pas le bon format"
-            end
             if !error
 
               log.message = "operation en cours."
