@@ -4,7 +4,7 @@ class AddMessageFieldToImportLog < ActiveRecord::Migration
   def up
     add_column :import_logs, :message, :string
 
-    
+
   end
 
   def down
