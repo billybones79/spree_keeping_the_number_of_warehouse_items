@@ -15,7 +15,7 @@ module Spree
 
             begin
               log = ImportLog.create(number: DateTime.now.to_s(:number))
-              log.message = "operation en cours."
+              log.message = "operation effectuée avec succés."
               log.save
               SmarterCSV.process(file.path, {:col_sep =>';', :chunk_size => 100, :key_mapping => {:sku_skuid=>:sku, :sku_available =>:qty , :sku_eds => :eds}}) do |chunk|
                 ChaindriveController.process_chunk chunk, log.id
@@ -31,9 +31,9 @@ module Spree
           end
 
         if(:return_to)
-          redirect_to session.delete(:return_to), :flash => error ? {:error =>error } : { :notice =>"operation en cours." }
+          redirect_to session.delete(:return_to), :flash => error ? {:error =>error } : { :notice =>"operation effectuée avec succés." }
         else
-          redirect_to ("/admin"), :flash =>error ? {:error =>error } : { :notice =>"operation en cours." }
+          redirect_to ("/admin"), :flash =>error ? {:error =>error } : { :notice =>"operation effectuée avec succés." }
         end
       end
       public
