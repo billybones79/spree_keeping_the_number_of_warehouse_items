@@ -5,7 +5,7 @@ module Spree
 
           session[:return_to] ||= request.referer
           file = params[:chaindrive_file].tempfile
-
+          puts "ca start, mais fuck"
           if File.extname(file.path) != ".csv"
             error = "mauvais type de fichier : "+File.extname(file.path)
           end
@@ -42,9 +42,9 @@ module Spree
         def self.process_chunk chunk, log_id
           log = ImportLog.find(log_id)
 
-          begin
           chunk.each do |row|
             variant = Spree::Variant.where(sku: row[:sku]).first
+            puts row[:qty]
             puts "qty"+row[:qty]
             puts "sku"+row[:sku]
             if variant && row[:qty].is_a?(Integer)
@@ -57,12 +57,6 @@ module Spree
                 log.save
                 break
               end
-            end
-          end
-          rescue
-            if log.message ==  "operation effectuée avec succès."
-              log.message = "Il y a eu une erreur lors du traitement de la tâche, il se pourrait que certains élements ne se soit pas ajusté correctement."
-              log.save
             end
           end
           if log.message ==  "operation en cours."
