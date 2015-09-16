@@ -23,10 +23,6 @@ module Spree
             rescue Redis::CannotConnectError
               log.delete
               error = "Une erreur de connection est survenue"
-            rescue StandardError =>e
-              log.delete
-              Rails.logger.error "erreur lors du chargement de fichier : #{e.message} "
-              error = "Le fichier n'a pas le bon format"
             end
           end
 
@@ -40,12 +36,9 @@ module Spree
         def self.process_chunk chunk, log_id
           log = ImportLog.find(log_id)
 
-          begin
           chunk.each do |row|
             variant = Spree::Variant.where(sku: row[:sku]).first
             puts row[:qty]
-            puts "qty"+row[:qty]
-            puts "sku"+row[:sku]
             if variant && row[:qty].is_a?(Integer)
               location = Spree::StockLocation.where(:default => true).first()
               if location
@@ -58,11 +51,7 @@ module Spree
               end
             end
           end
-          rescue
-            if log.message ==  "operation effectuée avec succès."
-              log.message = "Il y a eu une erreur lors du traitement de la tâche, il se pourrait que certains élements ne se soit pas ajusté correctement."
-              log.save
-            end
+
           end
           if log.message ==  "operation en cours."
             log.message = "Opération effectuée avec succès"
