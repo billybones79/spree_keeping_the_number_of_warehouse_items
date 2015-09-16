@@ -57,11 +57,13 @@ module Spree
               log.save
             end
           end
+
           if log.message ==  "operation en cours."
             log.message = "Opération effectuée avec succès"
             log.save
           end
         end
+      end
     end
   end
 
