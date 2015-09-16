@@ -23,7 +23,6 @@ module Spree
             rescue Redis::CannotConnectError
               log.delete
               error = "Une erreur de connection est survenue"
-            end
           end
 
         if(:return_to)
@@ -36,6 +35,7 @@ module Spree
         def self.process_chunk chunk, log_id
           log = ImportLog.find(log_id)
 
+          begin
           chunk.each do |row|
             variant = Spree::Variant.where(sku: row[:sku]).first
             puts row[:qty]
@@ -50,8 +50,12 @@ module Spree
                 break
               end
             end
-        
-
+          end
+          rescue
+            if log.message ==  "operation effectuée avec succès."
+              log.message = "Il y a eu une erreur lors du traitement de la tâche, il se pourrait que certains élements ne se soit pas ajusté correctement."
+              log.save
+            end
           end
           if log.message ==  "operation en cours."
             log.message = "Opération effectuée avec succès"
