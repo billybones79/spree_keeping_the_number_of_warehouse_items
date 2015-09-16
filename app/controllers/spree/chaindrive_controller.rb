@@ -50,7 +50,7 @@ module Spree
                 break
               end
             end
-          end
+        
 
           end
           if log.message ==  "operation en cours."
