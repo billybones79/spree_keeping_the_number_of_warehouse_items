@@ -25,12 +25,12 @@ module Spree
               error = "Une erreur inconnue est survenue"
 
             end
+          end
 
-        if(:return_to)
-          redirect_to session.delete(:return_to), :flash => error ? {:error =>error } : { :notice =>"operation effectuée avec succés." }
-        else
-          redirect_to ("/admin"), :flash =>error ? {:error =>error } : { :notice =>"operation effectuée avec succés." }
-        end
+          if(:return_to)
+            redirect_to session.delete(:return_to), :flash => error ? {:error =>error } : { :notice =>"operation effectuée avec succés." }
+          else
+            redirect_to ("/admin"), :flash =>error ? {:error =>error } : { :notice =>"operation effectuée avec succés." }
           end
       end
       public
