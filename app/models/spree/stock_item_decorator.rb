@@ -6,7 +6,6 @@ Spree::StockItem.class_eval do
                             only_integer: true, if: :verify_count_on_hand?
 
   validates_numericality_of :warehouse_stock,
-                            greater_than_or_equal_to: 0,
                             less_than_or_equal_to: 2**31 - 1,
                             only_integer: true, if: :verify_count_on_hand?
 

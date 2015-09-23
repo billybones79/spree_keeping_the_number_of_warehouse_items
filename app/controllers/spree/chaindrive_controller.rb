@@ -5,11 +5,10 @@ module Spree
 
           session[:return_to] ||= request.referer
           file = params[:chaindrive_file].tempfile
-          puts "ca start, mais fuck"
           if File.extname(file.path) != ".csv"
             error = "mauvais type de fichier : "+File.extname(file.path)
           end
-
+          puts "encule"
           #Dir.glob("*").max_by{|f| /^(.+?)_/.match(File.basename(f)).captures[0]}
           if !error
 
@@ -24,7 +23,7 @@ module Spree
               log.delete
               error = "Une erreur de connection est survenue"
             rescue StandardError
-              error = "Une erreur inconnue estsurvenue"
+              error = "Une erreur inconnue est survenue"
 
             end
 
@@ -42,7 +41,7 @@ module Spree
           begin
           chunk.each do |row|
             variant = Spree::Variant.where(sku: row[:sku]).first
-            puts row[:qty]
+
             if variant && row[:qty].is_a?(Integer)
               location = Spree::StockLocation.where(:default => true).first()
               if location
