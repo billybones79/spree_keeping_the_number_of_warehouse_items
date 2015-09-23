@@ -8,7 +8,6 @@ module Spree
           if File.extname(file.path) != ".csv"
             error = "mauvais type de fichier : "+File.extname(file.path)
           end
-          puts "encule"
           #Dir.glob("*").max_by{|f| /^(.+?)_/.match(File.basename(f)).captures[0]}
           if !error
 
