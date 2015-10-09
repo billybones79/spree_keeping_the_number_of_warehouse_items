@@ -16,7 +16,9 @@ module Spree
               log.message = "operation effectuée avec succés."
               log.save
               SmarterCSV.process(file.path, {:col_sep =>';', :chunk_size => 100, :key_mapping => {:sku_skuid=>:sku, :sku_available =>:qty , :sku_eds => :eds}}) do |chunk|
-                ChaindriveController.process_chunk chunk, log.id
+                ChaindriveWorker.perform_async(chunk, log.id)
+
+
               end
             rescue Redis::CannotConnectError
               log.delete
@@ -34,37 +36,6 @@ module Spree
           end
       end
       public
-        def self.process_chunk chunk, log_id
-          log = ImportLog.find(log_id)
-
-          begin
-          chunk.each do |row|
-            variant = Spree::Variant.where(sku: row[:sku]).first
-
-            if variant && row[:qty].is_a?(Integer)
-              location = Spree::StockLocation.where(:default => true).first()
-              if location
-
-                location.import_warehouse_item(variant, row[:qty], log)
-              else
-                log.message =  "Il n'y a pas de location par défaut, veuillez en sélectionner une."
-                log.save
-                break
-              end
-            end
-          end
-          rescue
-            if log.message ==  "operation effectuée avec succès."
-              log.message = "Il y a eu une erreur lors du traitement de la tâche, il se pourrait que certains élements ne se soit pas ajusté correctement."
-              log.save
-            end
-          end
-
-          if log.message ==  "operation en cours."
-            log.message = "Opération effectuée avec succès"
-            log.save
-          end
-        end
       end
 
   end
