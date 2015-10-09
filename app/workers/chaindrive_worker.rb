@@ -5,18 +5,22 @@ class ChaindriveWorker
     log = ImportLog.find(log_id)
 
     begin
-      chunk.each do |row|
-        variant = Spree::Variant.where(sku: row['sku']).first
 
-        if variant && row['qty'].is_a?(Integer)
-          location = Spree::StockLocation.where(:default => true).first()
-          if location
+      ActiveRecord::Base.transaction do
 
-            location.import_warehouse_item(variant, row['qty'], log)
-          else
-            log.message =  "Il n'y a pas de location par défaut, veuillez en sélectionner une."
-            log.save
-            break
+        chunk.each do |row|
+          variant = Spree::Variant.where(sku: row['sku']).first
+
+          if variant && row['qty'].is_a?(Integer)
+            location = Spree::StockLocation.where(:default => true).first()
+            if location
+
+              location.import_warehouse_item(variant, row['qty'], log)
+            else
+              log.message =  "Il n'y a pas de location par défaut, veuillez en sélectionner une."
+              log.save
+              break
+            end
           end
         end
       end
