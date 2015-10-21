@@ -12,7 +12,7 @@ module Spree
           if !error
 
             begin
-              log = ImportLog.create(number: DateTime.now.to_s(:number))
+              log = ImportLog.create(number: DateTime.now.to_s(:number), filename: params[:chaindrive_file].original_filename)
               log.message = "operation effectuée avec succés."
               log.save
               SmarterCSV.process(file.path, {:col_sep =>';', :chunk_size => 100, :key_mapping => {:sku_skuid=>:sku, :sku_available =>:qty , :sku_eds => :eds}}) do |chunk|

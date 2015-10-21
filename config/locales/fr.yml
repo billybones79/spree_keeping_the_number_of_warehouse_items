@@ -4,3 +4,7 @@ fr:
     number: "Numéro du log"
     chaindrive_import : "chaindrive"
     import_log_for_import_log: "Log d'importation pour le %{import_log_date}"
+    quantity_before: Quantité avant
+    quantity_after: Quantité après
+    movement: Nombre déplacé
+    file_name: Nom du fichier

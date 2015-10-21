@@ -14,7 +14,9 @@
       <thead>
       <tr data-hook="admin_stock_movements_index_headers">
         <th><%= Spree.t(:stock_item) %>
-        <th><%= Spree.t(:quantity) %></th>
+        <th><%= Spree.t(:quantity_before) %></th>
+        <th><%= Spree.t(:movement) %></th>
+        <th><%= Spree.t(:quantity_after) %></th>
       </tr>
       </thead>
       <tbody>
@@ -23,7 +25,10 @@
             <td>
               <%= display_variant(stock_movement) %>
             </td>
+            <td><%= stock_movement.quantity_before %></td>
             <td><%= stock_movement.quantity %></td>
+            <td><%= stock_movement.quantity_after %></td>
+
           </tr>
       <% end %>
       </tbody>

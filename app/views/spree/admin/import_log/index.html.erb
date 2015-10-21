@@ -3,6 +3,7 @@
       <thead>
       <tr data-hook="stock_locations_header">
         <th><%= Spree.t(:date) %></th>
+        <th><%= t(:file_name) %></th>
         <th><%= Spree.t(:number) %></th>
       </tr>
       </thead>
@@ -10,6 +11,7 @@
       <% @import_logs.each do |import_log| %>
           <tr>
             <td><%= import_log.created_at %></td>
+            <td><%= import_log.filename %></td>
             <td><%= link_to import_log.number, admin_import_log_path(import_log)  %> </td>
           </tr>
       <% end %>
