@@ -21,7 +21,7 @@ Spree::OrderInventory.class_eval do
 
     # removing this from shipment, and adding to stock_location
     if order.completed?
-      shipment.stock_location.restock_on_hold variant, removed_quantity, shipment
+        shipment.stock_location.restock_on_hold variant, removed_quantity, shipment
     end
 
     removed_quantity
@@ -39,7 +39,7 @@ Spree::OrderInventory.class_eval do
 
     # adding to this shipment, and removing from stock_location
     if order.completed?
-      shipment.stock_location.unstock_on_hold(variant, quantity, shipment)
+        shipment.stock_location.unstock_on_hold(variant, quantity, shipment)
     end
 
     quantity

@@ -4,13 +4,12 @@ Spree::StockMovement.class_eval do
 
   private
   def set_quantity_before
-    puts "before"
+
     begin
       self.quantity_before = self.stock_item.count_on_hand
     rescue StandardError => e
       puts e.inspect
     end
-    puts "atyayaya"
 
     begin
       return unless self.stock_item.should_track_inventory?
