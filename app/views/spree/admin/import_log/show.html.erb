@@ -1,6 +1,15 @@
 <% content_for :page_title do %>
     <div><%= Spree.t(:import_log_for_import_log, import_log_date: @import_log.created_at) %></div>
+    <% if @import_log.is_reverted? %>
+        <div>reverté par <%= link_to @import_log.last_reverter.number, admin_import_log_path(@import_log.last_reverter) %> </div>
+    <% end %>
     <div>message d'importation : <%=@import_log.message%></div>
+<% end %>
+
+<% content_for :page_actions do %>
+    <span id="revert">
+      <%= button_link_to "Retourner a l'importation précédente", spree.admin_chaindrive_revert_path(@import_log.id), { :icon => 'SS', :id => 'chaindrive_revert', :class => 'btn-success' } %>
+    </span>
 <% end %>
 
 

@@ -34,9 +34,6 @@ Spree::StockLocation.class_eval do
     # problable que on aie plus de warehouse_stock que de on_hand, mais pas l'inverse
     diff = [quantity - variant.warehouse_stock, quantity - variant.count_on_hand].min
 
-    puts diff
-    puts quantity
-    puts " suck a fuck"
     if diff>0
         restock(variant,diff, originator)
     elsif variant.count_on_hand + diff > 0 && diff !=0
@@ -45,6 +42,26 @@ Spree::StockLocation.class_eval do
          unstock(variant, variant.count_on_hand, originator)
     end
     variant.set_warehouse_stock(quantity)
+  end
+
+  def revert_warehouse_item(stock_movement, originator)
+    diff = -stock_movement.quantity
+    variant = stock_movement.stock_item
+
+    quantity = [variant.warehouse_stock + diff, variant.count_on_hand+diff+variant.stock_on_hold].max
+    variant.set_warehouse_stock(quantity)
+
+
+
+    if diff>0
+      restock(variant,diff, originator)
+    elsif variant.count_on_hand + diff > 0 && diff !=0
+      unstock(variant, -diff, originator)
+    else
+      unstock(variant, variant.count_on_hand, originator)
+    end
+
+
   end
 
 end
