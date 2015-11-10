@@ -22,26 +22,38 @@ Spree::StockLocation.class_eval do
   end
 
   def restock(variant, quantity, originator = nil)
-
+    puts "restock"
+    puts quantity
     move(variant, quantity, originator)
+  end
+
+  def move(variant, quantity, originator = nil)
+
+
+    stock_item_or_create(variant).stock_movements.create!(quantity: quantity,
+                                                          originator: originator)
   end
 
   def import_warehouse_item(variant, quantity, originator =nil)
 
-    variant =  stock_item_or_create(variant)
+    stock_item =  stock_item_or_create(variant)
 
     # on va se mettre le minimum entre la nouvelle quantité, ou la différence entre l'ancien warehousestock et le nouveau, car il est
     # problable que on aie plus de warehouse_stock que de on_hand, mais pas l'inverse
-    diff = [quantity - variant.warehouse_stock, quantity - variant.count_on_hand].min
+    diff = [quantity - stock_item.warehouse_stock, quantity - stock_item.count_on_hand].min
+
+    puts(stock_item.variant.inspect)
+    puts(stock_item.count_on_hand)
+    puts(diff)
 
     if diff>0
         restock(variant,diff, originator)
-    elsif variant.count_on_hand + diff > 0 && diff !=0
+    elsif stock_item.count_on_hand + diff > 0 && diff !=0
          unstock(variant, -diff, originator)
     elsif diff !=0
-         unstock(variant, variant.count_on_hand, originator)
+         unstock(variant, stock_item.count_on_hand, originator)
     end
-    variant.set_warehouse_stock(quantity)
+    stock_item.set_warehouse_stock(quantity)
   end
 
   def revert_warehouse_item(stock_movement, originator)
@@ -51,7 +63,9 @@ Spree::StockLocation.class_eval do
     quantity = [variant.warehouse_stock + diff, variant.count_on_hand+diff+variant.stock_on_hold].max
     variant.set_warehouse_stock(quantity)
 
-
+    puts(variant.inspect)
+    puts(variant.count_on_hand)
+    puts(diff)
 
     if diff>0
       restock(variant,diff, originator)
