@@ -58,21 +58,21 @@ Spree::StockLocation.class_eval do
 
   def revert_warehouse_item(stock_movement, originator)
     diff = -stock_movement.quantity
-    variant = stock_movement.stock_item
+    stock_item = stock_movement.stock_item
 
-    quantity = [variant.warehouse_stock + diff, variant.count_on_hand+diff+variant.stock_on_hold].max
-    variant.set_warehouse_stock(quantity)
+    quantity = [stock_item.warehouse_stock + diff, stock_item.count_on_hand+diff+stock_item.stock_on_hold].max
+    stock_item.set_warehouse_stock(quantity)
 
-    puts(variant.inspect)
-    puts(variant.count_on_hand)
+    puts(stock_item.inspect)
+    puts(stock_item.count_on_hand)
     puts(diff)
 
     if diff>0
-      restock(variant,diff, originator)
-    elsif variant.count_on_hand + diff > 0 && diff !=0
-      unstock(variant, -diff, originator)
+      restock(stock_item.variant,diff, originator)
+    elsif stock_item.count_on_hand + diff > 0 && diff !=0
+      unstock(stock_item.variant, -diff, originator)
     else
-      unstock(variant, variant.count_on_hand, originator)
+      unstock(stock_item.variant, stock_item.count_on_hand, originator)
     end
 
 
