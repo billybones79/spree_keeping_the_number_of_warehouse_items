@@ -6,7 +6,6 @@ class ChaindriveWorker
 
 
       ActiveRecord::Base.transaction do
-        begin
           chunk.each do |row|
             variant = Spree::Variant.where(sku: row['sku']).first
 
@@ -22,9 +21,6 @@ class ChaindriveWorker
               end
             end
           end
-        rescue => error
-          puts error.inspect
-        end
       end
   end
 
