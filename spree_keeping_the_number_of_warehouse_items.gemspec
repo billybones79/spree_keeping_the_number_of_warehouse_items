@@ -2,7 +2,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_keeping_the_number_of_warehouse_items'
-  s.version     = '3.0.77'
+  s.version     = '3.0.78'
   s.summary     = 'Adds a warehouse_count and on_hold count to products'
   s.description = 'Adds a warehouse_count and on_hold count to products for an easier integration with external inventory manager'
   s.required_ruby_version = '>= 2.0.0'
@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.requirements << 'none'
 
   s.add_dependency 'spree_core', '~> 3.0.3'
+  s.add_dependency 'activerecord-delay_touching', '~> 1.0.1'
 
   s.add_development_dependency 'capybara', '~> 2.4'
   s.add_development_dependency 'coffee-rails'
