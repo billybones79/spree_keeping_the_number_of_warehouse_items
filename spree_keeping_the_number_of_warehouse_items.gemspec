@@ -16,8 +16,12 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_dependency 'spree_core', '~> 3.0.3'
   s.add_dependency 'activerecord-delay_touching', '~> 1.0.1'
+  s.add_dependency 'sidekiq'
+  s.add_dependency 'redis-rails'
+  s.add_dependency 'smarter_csv'
+
+
 
   s.add_development_dependency 'capybara', '~> 2.4'
   s.add_development_dependency 'coffee-rails'

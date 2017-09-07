@@ -4,7 +4,7 @@
 
 var ready = function() {
 
-    $("#sidebar-chaindrive li").first().find("a").click(function () {
+    $("#autopak li").first().find("a").click(function () {
 
         $("#chaindrive_file").click();
         return false;
@@ -17,4 +17,3 @@ var ready = function() {
 
 
 $(document).ready(ready);
-$(document).on('page:load', ready);

@@ -1,0 +1,10 @@
+<ul class="admin-subnav" data-hook="admin_autopak_sub_tabs">
+  <li class=""><a href="#">Import</a></li>
+
+  <li class=""><a href="/admin/import_logs">Log</a>
+    <%= form_tag("/admin/chaindrive/import", multipart:true) do -%>
+        <input type="file" id="chaindrive_file" name="chaindrive_file" style="visibility: hidden; width: 1px; height: 1px" multiple />
+    <% end -%>
+  </li>
+</ul>
+

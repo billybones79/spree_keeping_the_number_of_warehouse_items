@@ -10,10 +10,12 @@ module Spree
       if !error
 
         begin
+          byebug
           log = ImportLog.create(number: DateTime.now.to_s(:number), filename: params[:chaindrive_file].original_filename)
           log.message = "operation effectuée avec succés."
           log.save
-          SmarterCSV.process(file.path, {:col_sep =>';', :chunk_size => 200, :key_mapping => {:sku_skuid=>:sku, :sku_available =>:qty , :sku_eds => :eds}}) do |chunk|
+          SmarterCSV.process(file.path, {:col_sep =>';', :chunk_size => 200, :key_mapping => {:"#_pièce"=>:sku, :stock =>:qty , :sku_eds => :eds}}) do |chunk|
+            byebug
             ChaindriveWorker.perform_async(chunk, log.id)
 
 
@@ -22,6 +24,7 @@ module Spree
           log.delete
           error = "Une erreur de connection est survenue"
         rescue StandardError
+          byebug
           error = "Une erreur inconnue est survenue"
 
         end
