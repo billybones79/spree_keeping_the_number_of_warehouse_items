@@ -14,7 +14,7 @@ Spree::Shipment.class_eval do
     def after_ship
       manifest.each { |item| stock_location.remove_from_warehouse item.variant, item.quantity, self
                               stock_location.remove_on_hold item.variant, item.quantity}
-      Spree::ShipmentHandler.factory(self).perform
+      order.shipping.ship_shipment(self, suppress_mailer: suppress_mailer)
     end
 
   def after_cancel
