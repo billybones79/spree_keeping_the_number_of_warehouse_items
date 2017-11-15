@@ -1,6 +1,6 @@
 class ChaindriveWorker
   include Sidekiq::Worker
-  def self.perform(chunk, log_id)
+  def perform(chunk, log_id)
     log = ImportLog.find(log_id)
 
     ActiveRecord::Base.delay_touching do
