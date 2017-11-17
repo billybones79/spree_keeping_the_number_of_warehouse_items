@@ -8,13 +8,28 @@ module Spree
           error = "mauvais type de fichier : "+File.extname(file.path)
         end
         #Dir.glob("*").max_by{|f| /^(.+?)_/.match(File.basename(f)).captures[0]}
+
         if !error
+
 
           begin
             log = ImportLog.create(number: DateTime.now.to_s(:number), filename: params[:chaindrive_file].original_filename)
             log.message = "operation effectuée avec succés."
             log.save
-            SmarterCSV.process(file.path, {:col_sep =>';', :chunk_size => 200, :key_mapping => {:"#_pièce"=>:sku, :stock =>:qty , :sku_eds => :eds}}) do |chunk|
+            user_headers = []
+           26.times do |i|
+              user_headers[i] = (i+97).chr.to_sym
+           end
+
+            26.times do |i|
+              user_headers[i+26] = ("a"+((i+97).chr)).to_sym
+            end
+
+            user_headers[27]=:sku
+            user_headers[38]=:qty
+            SmarterCSV.process(file.path, {:col_sep =>',', :chunk_size => 200, :headers_in_file=>false, :user_provided_headers => user_headers}) do |chunk|
+              byebug
+
               ChaindriveWorker.perform_async(chunk, log.id)
 
 
@@ -22,8 +37,6 @@ module Spree
           rescue Redis::CannotConnectError
             log.delete
             error = "Une erreur de connection est survenue"
-          rescue StandardError
-            error = "Une erreur inconnue est survenue"
 
           end
         end
