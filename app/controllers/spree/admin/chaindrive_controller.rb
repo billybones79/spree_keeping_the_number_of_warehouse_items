@@ -28,7 +28,6 @@ module Spree
             user_headers[27]=:sku
             user_headers[38]=:qty
             SmarterCSV.process(file.path, {:col_sep =>',', :chunk_size => 200, :headers_in_file=>false, :user_provided_headers => user_headers}) do |chunk|
-              byebug
 
               ChaindriveWorker.perform_async(chunk, log.id)
 
