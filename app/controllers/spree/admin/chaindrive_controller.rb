@@ -26,10 +26,11 @@ module Spree
             end
 
             user_headers[27]=:sku
-            user_headers[39]=:qty
+            user_headers[38]=:qty
             SmarterCSV.process(file.path, {:col_sep =>',', :chunk_size => 200, :headers_in_file=>false, :user_provided_headers => user_headers}) do |chunk|
 
-              ChaindriveWorker.perform_async(chunk, log.id)
+
+              ChaindriveWorker.perform(chunk, log.id)
 
 
             end
