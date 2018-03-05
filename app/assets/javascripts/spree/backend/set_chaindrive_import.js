@@ -13,6 +13,12 @@ var ready = function() {
     $("#chaindrive_file").change(function () {
         $(this).parents("form").submit();
     });
+
+    $(".datetimepicker").datetimepicker({
+            dateFormat: 'dd/mm/yy'
+
+        }
+    );
 };
 
 
