@@ -1,6 +1,9 @@
 <%= form_tag('/admin/chaindrive/import', multipart:true) do -%>
-    <input type='file' id='chaindrive_file' name='chaindrive_file' multiple />
-    <input type='text' id='datetime' name='time' class="datetimepicker form-control" />
+    <label for="chaindrive_file">Fichier d'import:</label>
+    <input type='file' id='chaindrive_file' name='chaindrive_file' multiple required="required"/>
+    <label for="datetime">date de l'import : </label>
+    <%= text_field_tag 'datetime', "",  class:'datetimepicker form-control', required:true %>
+
     <input type ='submit' value ="planifier"></input>
 
 <% end -%>
