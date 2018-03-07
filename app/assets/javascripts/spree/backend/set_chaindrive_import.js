@@ -4,7 +4,7 @@
 
 var ready = function() {
 
-    $("#sidebar-chaindrive li").first().find("a").click(function () {
+   /* $("#sidebar-chaindrive li").first().find("a").click(function () {
 
         $("#chaindrive_file").click();
         return false;
@@ -13,7 +13,7 @@ var ready = function() {
     $("#chaindrive_file").change(function () {
         $(this).parents("form").submit();
     });
-
+*/
     $(".datetimepicker").datetimepicker({
             dateFormat: 'dd/mm/yy'
 
