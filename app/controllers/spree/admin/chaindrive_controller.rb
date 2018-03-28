@@ -24,7 +24,7 @@ module Spree
             log.message = "operation effectuée avec succés."
             log.save
             data = SmarterCSV.process(file.path, {:col_sep =>';', :key_mapping => {:sku_skuid=>:sku, :sku_available =>:qty , :sku_eds => :eds}})
-            ChaindriveWorker.perform_at(at, data, log.id)
+            EmptyStockWorker.perform_at(at, data, log.id)
 
 
           rescue Redis::CannotConnectError

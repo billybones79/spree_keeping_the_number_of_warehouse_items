@@ -7,7 +7,6 @@ class ChaindriveWorker
     ActiveRecord::Base.delay_touching do
 
       ActiveRecord::Base.transaction do
-        Spree::StockLocation.where(:default => true).first().stock_items.update_all(warehouse_stock: 0, count_on_hand: 0)
 
         chunk.each do |row|
           variant = Spree::Variant.where(sku: row['sku']).first
@@ -25,6 +24,7 @@ class ChaindriveWorker
           end
         end
       end
-    end
+
+      end
   end
 end
