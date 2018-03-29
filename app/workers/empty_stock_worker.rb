@@ -7,12 +7,12 @@ class EmptyStockWorker
     ActiveRecord::Base.delay_touching do
 
       ActiveRecord::Base.transaction do
-        Spree::StockLocation.where(:default => true).first().stock_items.update_all(warehouse_stock: 0, count_on_hand: 0)
+        Spree::StockLocation.where(:default => true).first().stock_items.where.not(variant_id: Spree::Variant.where(sku: (chunk.map { |el| el["sku"] } )).pluck(&:id)).update_all(warehouse_stock: 0, count_on_hand: 0)
       end
 
-      chunk.each_slice(100).with_index do |chunk, i|
+      chunk.each_slice(300).with_index do |chunk, i|
 
-        ChaindriveWorker.perform_at(Time.now + i.seconds, chunk, log.id)
+        ChaindriveWorker.perform_at(Time.now + (i*6).seconds, chunk, log.id)
 
       end
     end

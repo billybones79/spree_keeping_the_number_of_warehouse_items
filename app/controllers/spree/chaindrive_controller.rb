@@ -4,7 +4,6 @@ module Spree
 
     end
     def import
-      byebug
       session[:return_to] ||= request.referer
       file = params[:chaindrive_file].tempfile
       if File.extname(file.path) != ".csv"
