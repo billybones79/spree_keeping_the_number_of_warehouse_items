@@ -40,7 +40,7 @@ Spree::StockLocation.class_eval do
 
     # on va se mettre le minimum entre la nouvelle quantité, ou la différence entre l'ancien warehousestock et le nouveau, car il est
     # problable que on aie plus de warehouse_stock que de on_hand, mais pas l'inverse
-    diff = [quantity - stock_item.warehouse_stock, quantity - stock_item.count_on_hand].min
+    diff = [quantity - stock_item.warehouse_stock, quantity - (stock_item.count_on_hand + stock_item.stock_on_hold)].min
 
 
     if diff>0
