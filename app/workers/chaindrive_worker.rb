@@ -4,7 +4,6 @@ class ChaindriveWorker
   def self.perform(chunk, log_id)
     log = ImportLog.find(log_id)
 
-
       ActiveRecord::Base.transaction do
         chunk.each do |row|
           variant = Spree::Variant.where(sku: row[:sku]).first
