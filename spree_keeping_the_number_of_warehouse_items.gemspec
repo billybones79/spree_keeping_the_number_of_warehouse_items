@@ -2,7 +2,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_keeping_the_number_of_warehouse_items'
-  s.version     = '3.0.79'
+  s.version     = '3.0.81'
   s.summary     = 'Adds a warehouse_count and on_hold count to products'
   s.description = 'Adds a warehouse_count and on_hold count to products for an easier integration with external inventory manager'
   s.required_ruby_version = '>= 2.0.0'
