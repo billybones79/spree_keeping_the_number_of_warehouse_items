@@ -11,6 +11,7 @@ module Spree
 
         if !error
 
+
           begin
             log = ImportLog.create(number: DateTime.now.to_s(:number), filename: params[:chaindrive_file].original_filename)
             log.message = "operation effectuée avec succés."
@@ -24,8 +25,8 @@ module Spree
               user_headers[i+26] = ("a"+((i+97).chr)).to_sym
             end
 
-            user_headers[25]=:sku
-            user_headers[36]=:qty
+            user_headers[27]=:sku
+            user_headers[38]=:qty
             SmarterCSV.process(file.path, {:col_sep =>',', :chunk_size => 200, :headers_in_file=>false, :user_provided_headers => user_headers}) do |chunk|
 
 
